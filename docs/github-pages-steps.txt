@@ -1,0 +1,20 @@
+#Add-commit-push-deploy to github-pages
+#Last edit by Aishwarya on 28-June-2019.
+
+git status
+git checkout gh-pages
+git status
+git add images/monocle3_new_workflow.png
+#If more than one change made, to add all the changes
+git add .
+git status
+git commit -m "Added workflow figure" #Where -m is a note about what I added
+git push
+#If the above gives error, I'm behind. Then do git pull and git push again.
+git status
+
+#For the workflow fig to show up on the website
+
+#Manually edit monocle3_new_docs.html in atom and then
+git commit -am "Location of workflow figure"
+git push
