@@ -16,5 +16,8 @@ git status
 #For the workflow fig to show up on the website
 
 #Manually edit monocle3_new_docs.html in atom and then
-git commit -am "Location of workflow figure"
+git commit -a -m "Location of workflow figure"
 git push
+
+#To remove a file
+git rm file
