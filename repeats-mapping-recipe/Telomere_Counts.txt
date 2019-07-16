@@ -1,0 +1,12 @@
+####This command is for counting telomeric repeat sequences from fastq files.
+####Note to self: streamline more!!
+####Last edit by Aishwarya on 7th June 2018.
+
+##Step1: decompress the fastq file.
+gzip -d file1.fastq.gz
+gzip -d file2.fastq.gz
+
+##Step2: find/count how many times a string (TTAGGG) occurs in the file.
+##Command Usage
+grep -c "TTAGGG" file1.fastq > file1_TelRepCts.txt
+grep -c "TTAGGG" file2.fastq > file2_TelRepCts.txt
