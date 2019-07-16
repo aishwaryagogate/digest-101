@@ -1,0 +1,69 @@
+#Running ROSE - Rank Ordering of Super-Enhancers
+#Find all required downloads (like annotations folder) here: http://younglab.wi.mit.edu/super_enhancer_code.html
+#Last Edit by Aishwarya on 7th Feb, 2019.
+
+###Example command###
+##python ROSE_main.py -g MM10 -i ./enhancer_regions.gff -r ./129_H3K27ac_SI_rep3_norm.bam -c ./129_INPUT_SI_rep3_norm.bam -o example -s 12500 -t 2500
+##where:
+#ROSE_main.py is the master script calling other scripts to perform each step.
+#-g is the genome build
+#-i is the input file in GFF format of the enhancer regions to rank order.
+#-r is the nodup bam file of the signal on which you want to rank enhancers (in my case, it's the WT ChIP signal)
+#-c is the control/input for the above sample
+#-o is the output directory
+#-s stitching distance
+#-t is the exclusion zone around TSS
+
+#Note: Run the commands from bin that contains all necessary code and annotation directory.
+
+##What does it do?
+##MAPS SUPER-ENHANCERS USING REGIONS DEFINED BY ESC_Enhancers.gff AND RANKING BY WT H3K27ac ChIP-SEQ SIGNAL FROM 129_H3K27ac_SI_rep3_norm.bam WITH BACKGROUND CORRECTION FROM THE CONTROL 129_INPUT_SI_rep3_norm.bam
+##REPEATS SAME PROCESS FOR THE H3.3 KO H3K27ac
+##OUTPUTS CHIP SIGNAL OVER STITCHED ENHANCER REGIONS FOR CHIP AND CONTROL IN TEXT FILES (INDICATING IF AN ENHANCER IS SUPER OR NOT)
+##OUTPUTS HOCKEY STICK/INFLECTION PLOT OF RANKED ENHANCERS ON X-AXIS AND CHIP-SEQ SIGNAL AT THESE REGIONS ON Y-AXIS
+##STITCHING_DISTANCE: maximum distance between two regions that will be stitched together denoted by -s (Default: 12.5kb).
+##TSS_EXCLUSION_ZONE_SIZE: exclude regions contained within +/- this distance (in bp) from TSS in order to account for promoter biases (We use: 3000; generally recommended if used: 2500).
+
+##Command usage for my data##
+module load python
+module load samtools
+module load R
+
+python ROSE_main.py -g MM10 -i ./ESC_ENH.gff -r ./129_H3K27ac_SI_rep3_norm.bam -c ./129_INPUT_SI_rep3_norm.bam -o 129_H3K27ac -s 12500 -t 3000
+python ROSE_main.py -g MM10 -i ./ESC_ENH.gff -r ./282_H3K27ac_SI_rep3_norm.bam -c ./282_INPUT_SI_rep3_norm.bam -o 282_H3K27ac -s 12500 -t 3000
+
+##I AM TRYING MODS TO THE EXISTING YOUNG LAB CODE!!
+##1.CHANGING OUTPUT PLOT FORMAT TO PDF -- DONE
+##2.PLOTTING WT & KO IN SAME PLOT -- In Progress
+##3.CHANGING COLOUR OF POINTS TO MATCH OUR WT & KO COLOUR CODES -- DONE
+
+##Got following errors:
+##Error1:
+#File "ROSE_main.py", line 292
+#    inputGFFFile = options.input
+##Checked Issues tab on Young lab bitbucket and others seem to have the same issue
+##Suggested Fix: Use python2 instead of python3 (python 2.7 should do the trick)
+
+##Error2:
+#File "ROSE_bamToGFF.py", line 40, in mapBamToGFF
+#    MMR= round(float(bam.getTotalReads('mapped'))/1000000,4)
+#TypeError: float() argument must be a string or a number
+##NOT ABLE TO FIX!
+##No suggestions on issues tab of authors github too! IT'S VERY FRUSTRATING!!
+
+##Error3:
+#plotFileName = paste(outFolder,enhancerName,'_Plot_points.png',sep='')
+#png(filename=plotFileName,height=600,width=600)
+#Error in .External2(C_X11, paste("png::", filename, sep = ""), g$width,  :
+#  unable to start device PNG
+#Calls: png
+#In addition: Warning message:
+#In png(filename = plotFileName, height = 600, width = 600) :
+#  unable to open connection to X11 display ''
+
+###Please Note###
+##Make changes to the ROSE_callSuper.R script. Change image output format to PDF. Change lines 165 and 166 to this:
+#MAKING HOCKEY STICK PLOT
+#plotFileName = paste(outFolder,enhancerName,'_Plot_points.pdf',sep='')
+pdf("129_H3K27ac.pdf",height=10,width=6,paper='special')
+##Remember: Our cluster doesn't have R capabilities for png. So we can make .tiff or .pdf when using R in cluster!!

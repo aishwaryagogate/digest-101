@@ -1,0 +1,120 @@
+## Histograms & Density plots in R.
+## By Aishwarya
+##Last edited 4-Apr-2019.
+
+####DensityPlots
+##Comparing two columns of data.
+##For RPKM FC of 129vs282 under distal DOWN vs promoters.
+Data5<-read.csv("/project/GCRB/Banaszynski_lab/shared/yourfolder/WT.csv")
+Data6<-read.csv("/project/GCRB/Banaszynski_lab/shared/yourfolder/KO.csv")
+head(Data5)
+head(Data6)
+pdf("densityplot_FC_RPKM_WTvsKO_H3K27ac_vs_p300_underdistalDOWN.pdf")
+plot(density(Data5$WT_FC),col="blue", lty=1, lwd=4, main="FC of WTvsKO H3K27ac vs p300 under distal DOWN",xlab="RPKM", ylim=c(0,0.8), xlim=c(-10,12))
+lines(density(Data6$KO_FC),col="red3", lty=1, lwd=4)
+legend('topright',c('WT/KO H3K27ac','WT/KO p300'), fill = c("blue","red3"), bty = 'n', border = NA)
+dev.off()
+##To test significance & get a statistic: Two-sample Kolmogorov-Smirnov test
+ks.test(Data5$WT_FC,Data6$KO_FC) #D = 0.0764, p-value = 0.2591
+
+##For comparing fold-change difference in FPKM between WT (D4/D0) & KO (D4/D0) for NNG of gained peaks in WT D4.
+Data5<-read.csv("/project/GCRB/Banaszynski_lab/shared/yourfolder/WT.csv")
+Data6<-read.csv("/project/GCRB/Banaszynski_lab/shared/yourfolder/KO.csv")
+head(Data5)
+head(Data6)
+pdf("densityplot_FC_RPKM_D0-D4_WTvsKO_H3K27ac_gainedpeaksinWTD4.pdf")
+plot(density(Data5$WT_FC),col="blue", lty=1, lwd=4, main="Fold Change difference in H3K27ac at gained peaks in WT D4",xlab="RPKM", ylim=c(0,0.50))
+lines(density(Data6$KO_FC),col="red3", lty=1, lwd=4)
+legend('topright',c('WT(D4/D0)','KO(D4/D0)'), fill = c("blue","red3"), bty = 'n', border = NA)
+dev.off()
+##To test significance & get a statistic: Two-sample Kolmogorov-Smirnov test
+ks.test(Data5$WT_FC,Data6$KO_FC) #D = 0.0764, p-value = 0.2591
+
+##Comparing four columns of data.
+Data1<-read.csv("/project/GCRB/Banaszynski_lab/shared/yourfolder/data5.csv")
+Data2<-read.csv("/project/GCRB/Banaszynski_lab/shared/yourfolder/data6.csv")
+Data3<-read.csv("/project/GCRB/Banaszynski_lab/shared/yourfolder/data7.csv")
+Data4<-read.csv("/project/GCRB/Banaszynski_lab/shared/yourfolder/data8.csv")
+head(Data1)
+head(Data2)
+head(Data3)
+head(Data4)
+pdf("densityplot_FPKM_D0-D4_WTvsKO_ofNNG_gainedpeaksinWTD4.pdf")
+plot(density(Data1$WT_D0),col="darkblue", lty=1, lwd=4, main="NNG expression of gained peaks in WT D4",xlab="Log2(FPKM)")
+lines(density(Data2$WT_D4),col="dodgerblue4", lty=2, lwd=4)
+lines(density(Data3$KO_D0),col="darkorange", lty=1, lwd=4)
+lines(density(Data4$KO_D4),col="red3", lty=2, lwd=4)
+legend('topright',c('WT_D0','WT_D4','KO_D0','KO_D4'), fill = c("darkblue","dodgerblue4","darkorange","red3"), bty = 'n', border = NA)
+dev.off()
+##To test significance & get a statistic: Two-sample Kolmogorov-Smirnov test
+ks.test(Data1$WT_D0,Data2$WT_D4) #D = 0.0764, p-value = 0.2591
+ks.test(Data3$KO_D0,Data4$KO_D4)
+ks.test(Data1$WT_D0,Data3$KO_D0)
+ks.test(Data2$WT_D4,Data4$KO_D4)
+
+##11th Feb ROSE Downstream Analysis##
+##For comparing fold-change difference in FPKM between WT (D4/D0) & KO (D4/D0) for NNG of gained peaks in WT D4.
+Data1<-read.csv("/project/GCRB/Banaszynski_lab/shared/yourfolder/WT_at_SE.csv")
+Data2<-read.csv("/project/GCRB/Banaszynski_lab/shared/yourfolder/KO_at_SE.csv")
+head(Data1)
+head(Data2)
+pdf("Densityplot_H3K27ac_ChIPsignal_at_AllSE.pdf")
+plot(density(Data1$WT),col="blue", lty=1, lwd=4, main="H3K27ac ChIP signal at All SE",xlab="Log2 (H3K27ac ChIP signal / Input)", ylim=c(0,0.40))
+lines(density(Data2$KO),col="red3", lty=1, lwd=4)
+legend('topright',c('WT(H3K27ac/Input)','KO(H3K27ac/Input)'), fill = c("blue","red3"), bty = 'n', border = NA)
+abline(v = mean(Data1$WT), col="blue", lwd=2, lty=2)
+abline(v = mean(Data2$KO), col="red3", lwd=2, lty=2)
+#abline(v = median(Data1$WT), col="blue", lty=2)
+#abline(v = median(Data2$KO), col="red3", lty=2)
+dev.off()
+##To test significance & get a statistic: Two-sample Kolmogorov-Smirnov test
+ks.test(Data1$WT,Data2$KO) #D = 0.0764, p-value = 0.2591
+
+##4th April - Final Paper Acceptance Requests##
+##Density plot of H3K27ac ChIP Log2FC(WT/KO)##
+Data1<-read.csv("/project/GCRB/Banaszynski_lab/shared/yourfolder/H3K27ac_FC.csv")
+head(Data1)
+pdf("Densityplot_H3K27ac_Log2FC_WTbyKO_at_AllEnhancers.pdf")
+plot(density(Data1$Log2FC),col="blue", lty=1, lwd=4, main="H3K27ac FC under All Enhancers",xlab="H3K27ac Log2FC(WT/KO)", ylim=c(0,0.50))
+legend('topright','Log2FC(WT/KO)', fill = "blue", bty = 'n', border = NA)
+#abline(v = mean(Data1$WT), col="blue", lwd=2, lty=2)
+#abline(v = mean(Data2$KO), col="red3", lwd=2, lty=2)
+#abline(v = median(Data1$WT), col="blue", lty=2)
+#abline(v = median(Data2$KO), col="red3", lty=2)
+dev.off()
+
+
+####Histograms (overlay)
+#Need this package
+#install.packages("scales")
+#Load the package
+library(scales)
+
+##Load data csv file (Here comparing four columns of data)
+pdf("histogram_FPKM_D0-D4_WTvsKO_ofNNG_gainedpeaksinWTD4.pdf")
+set.seed(42)
+Data<-read.csv("/project/GCRB/Banaszynski_lab/shared/yourfolder/data3.csv")
+head(Data)
+w <- Data$WT_D0
+x <- Data$WT_D4
+y <- Data$KO_D0
+z <- Data$KO_D4
+#Plot histograms for the above generated objects.
+hist(w,xlim=c(-10,15),ylim=c(0,200),col='deepskyblue3',xlab="FPKM distribution", main="NNG exp of gained peaks in WT D4", border=F)
+hist(x,add=T,col=scales::alpha('dodgerblue4',.10),border=F)
+hist(y,add=T,col=scales::alpha('orangered',.10),border=F)
+hist(z,add=T,col=scales::alpha('orangered4',.10),border=F)
+dev.off()
+
+##Load data csv file (Here comparing two columns of data)
+pdf("histogram_FC_FPKM_D0-D4_WTvsKO_ofNNG_gainedpeaksinWTD4.pdf")
+set.seed(42)
+Data<-read.csv("/project/GCRB/Banaszynski_lab/shared/yourfolder/data.csv")
+head(Data)
+x <- Data$WT_FC
+y <- Data$KO_FC
+#Plot histograms for the above generated objects.
+hist(x,xlim=c(-10,15),ylim=c(0,200),col='skyblue',xlab="FPKM distribution", main="NNG exp of gained peaks in WT D4", border=F)
+hist(y,add=T,col=scales::alpha('red',.50),border=F)
+legend('topright',c('WT(D4/D0)','KO(D4/D0)'), fill = c("skyblue","red"), bty = 'n', border = NA)
+dev.off()

@@ -1,0 +1,34 @@
+##KM plot/Survival plot
+##Last edit by Aishwarya in April 2018.
+
+#install.packages("survival")
+library(survival)
+#mutation_data <- read.table("Mutations_TCGA.txt",sep="\t",header=T)
+mutation_data <- read.table("Mutations_Sato.txt",sep="\t",header=T)
+head(mutation_data)
+tail(mutation_data)
+mutation_data_df<- data.frame(OS_time=mutation_data$OSMonths,OS_STATUS=mutation_data$OS,expStatus=mutation_data$MUT)
+
+#OS_STATUS=OS => DiseaseFree=0 & Recurred/Progressed=1
+
+rownames(mutation_data_df) <- mutation_data$ID
+head(mutation_data_df)
+
+mutation_data_df.surv <- survfit(Surv(OS_time,OS_STATUS) ~ expStatus, data = mutation_data_df)
+summary(mutation_data_df.surv)
+survdiff(Surv(OS_time, OS_STATUS) ~ expStatus, data = mutation_data_df)
+
+#########
+#Call:
+#survdiff(formula = Surv(OS_time, OS_STATUS) ~ expStatus, data = glio_withexppatients_df)
+#N Observed Expected (O-E)^2/E (O-E)^2/V
+#expStatus=A 311      311      234      25.5      61.8
+#expStatus=B 203       94      171      34.8      61.8
+#Chisq= 61.8  on 1 degrees of freedom, p= 3.89e-15
+#########
+
+pdf("KM_DiseaseFree_SurvivalPlot_Sato_updated.pdf") #the order of plotting the 2 lines is in alphabetical order. so first non significant and then up are plotted
+plot(mutation_data_df.surv, conf.int=FALSE,col=c("blue","red3","darkorchid","darkorange"),xlab="DFSMonths", ylab="Survival",lty=1,lwd=2)
+legend("topright", c("ET", "SET","SRI","Other"),col=c("blue","darkorchid","darkorange","red3"),lty=1, lwd=4)
+title("KM plot for DiseaseFree Survival Sato-updated")
+dev.off()

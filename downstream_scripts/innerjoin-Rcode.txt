@@ -1,0 +1,88 @@
+info<-read.table(file="activated.txt", sep="\t", header=T)
+head(info)
+refinfo<-read.table(file="data.txt", sep="\t", header=T)
+head(refinfo)
+total<-merge(info, refinfo, by="ID",all.x = TRUE)
+write.table(total, file="KO_D0_FPKM_foractivatedgenesinWTD4.txt", sep="\t")
+
+info<-read.table(file="repressed.txt", sep="\t", header=T)
+head(info)
+refinfo<-read.table(file="data.txt", sep="\t", header=T)
+head(refinfo)
+total<-merge(info, refinfo, by="ID",all.x = TRUE)
+write.table(total, file="KO_D0_FPKM_forrepressedgenesinWTD4.txt", sep="\t")
+
+
+##For expression of NNG of gained and lost peaks in 129 D4 H3K27ac.
+info<-read.table(file="gained.txt", sep="\t", header=T)
+head(info)
+refinfo<-read.table(file="dataD0.txt", sep="\t", header=T)
+head(refinfo)
+total<-merge(info, refinfo, by="ID",all.x = TRUE)
+write.table(total, file="WTvsKO_D0_FPKM_forNNG_gainedpeaksinWTD4.txt", sep="\t")
+
+info<-read.table(file="gained.txt", sep="\t", header=T)
+head(info)
+refinfo<-read.table(file="dataD4.txt", sep="\t", header=T)
+head(refinfo)
+total<-merge(info, refinfo, by="ID",all.x = TRUE)
+write.table(total, file="WTvsKO_D4_FPKM_forNNG_gainedpeaksinWTD4.txt", sep="\t")
+
+info<-read.table(file="lost.txt", sep="\t", header=T)
+head(info)
+refinfo<-read.table(file="dataD0.txt", sep="\t", header=T)
+head(refinfo)
+total<-merge(info, refinfo, by="ID",all.x = TRUE)
+write.table(total, file="WTvsKO_D0_FPKM_forNNG_lostpeaksinWTD4.txt", sep="\t")
+
+info<-read.table(file="ID.txt", sep="\t", header=T)
+head(info)
+refinfo<-read.table(file="data.txt", sep="\t", header=T)
+head(refinfo)
+total<-merge(info, refinfo, by="ID",all.x = TRUE)
+write.table(total, file="KO_FC_DOWNgenes.txt", sep="\t")
+
+#####ABEB RNA-Seq######
+info<-read.table(file="H32vsH33_up.txt", sep="\t", header=T)
+head(info)
+refinfo<-read.table(file="ABEBexpdata.txt", sep="\t", header=T)
+head(refinfo)
+total<-merge(info, refinfo, by="ID",all.x = TRUE)
+write.table(total, file="ABEBexpdata_forH32vsH33_upgenes.txt", sep="\t")
+
+info<-read.table(file="H32vsH33_down.txt", sep="\t", header=T)
+head(info)
+refinfo<-read.table(file="ABEBexpdata.txt", sep="\t", header=T)
+head(refinfo)
+total<-merge(info, refinfo, by="ID",all.x = TRUE)
+write.table(total, file="ABEBexpdata_forH32vsH33_downgenes.txt", sep="\t")
+
+info<-read.table(file="gain_NNG.txt", sep="\t", header=T)
+head(info)
+refinfo<-read.table(file="ABEBexpdata.txt", sep="\t", header=T)
+head(refinfo)
+total<-merge(info, refinfo, by="ID",all.x = TRUE)
+write.table(total, file="ABEBexpdata_forgainedpeaks_NNG.txt", sep="\t")
+
+
+
+info<-read.table(file="Q1.txt", sep="\t", header=T)
+head(info)
+refinfo<-read.table(file="ABEBexpdata.txt", sep="\t", header=T)
+head(refinfo)
+total<-merge(info, refinfo, by="ID",all.x = TRUE)
+write.table(total, file="ABEBexpdata_forH32vsH33_HighExpQ1upgenes.txt", sep="\t")
+
+info<-read.table(file="Q3.txt", sep="\t", header=T)
+head(info)
+refinfo<-read.table(file="ABEBexpdata.txt", sep="\t", header=T)
+head(refinfo)
+total<-merge(info, refinfo, by="ID",all.x = TRUE)
+write.table(total, file="ABEBexpdata_forH32vsH33_ModExpQ3upgenes.txt", sep="\t")
+
+info<-read.table(file="Q5.txt", sep="\t", header=T)
+head(info)
+refinfo<-read.table(file="ABEBexpdata.txt", sep="\t", header=T)
+head(refinfo)
+total<-merge(info, refinfo, by="ID",all.x = TRUE)
+write.table(total, file="ABEBexpdata_forH32vsH33_LowExpQ5upgenes.txt", sep="\t")

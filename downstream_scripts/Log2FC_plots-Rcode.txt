@@ -1,0 +1,12 @@
+##Last edit by Aishwarya in February 2018.
+
+##With all 4 quadrants - success!!.
+x<-read.table(file="/project/GCRB/Banaszynski_lab/shared/yourfolder/ALLquad_FCplot.txt", sep="\t", header=T)
+attach(x)
+names(x)
+cor(log2FC_129,log2FC_282)
+pdf("WTandKO_D4vsD0Log2FC_UPandDOWNgenesinWT_quadrantplot.pdf")
+plot(log2FC_129, log2FC_282, main="Log2(FC) of UP & DOWN genes in WT", xlab="Log2(FC) of WT D0vsD4", ylab="Log2(FC) of KO D0vsD4", las=1, xlim=c(-10,10), ylim=c(-10,10), pch=8, col=2, bty="n")
+#abline(lm(log2FC_282~log2FC_129))
+abline(h = 0,v = 0, col="gray60", lty = 2)
+dev.off()

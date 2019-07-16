@@ -1,0 +1,123 @@
+##R heat maps code
+##Last Edit by Aishwarya in March 2019.
+
+#############################USE THIS ONE!!############################
+# need to install these packages
+# gplots contains the heatmap.2 function
+install.packages("gplots")
+install.packages("RColorBrewer")
+
+#Load the installed packages
+library("RColorBrewer")
+library(gplots)
+
+#Read in data file and create a matrix of values
+data <- read.table("H33.txt",sep="\t",header=TRUE,row.names=1)
+data_matrix <- data.matrix(data)
+
+#following code limits the lowest and highest color to 5%, and 95% of your range, respectively
+quantile.range <- quantile(data_matrix, probs = seq(0, 1, 0.01))
+palette.breaks <- seq(quantile.range["5%"], quantile.range["95%"], 0.1)
+
+# use http://colorbrewer2.org/ to find optimal divergent color palette (or set own)
+#color.palette  <- colorRampPalette(c("#deebf7", "#9ecae1", "#3182bd"))(length(palette.breaks) - 1)
+#color.palette  <- colorRampPalette(c("#fee8c8", "#fdbb84", "#e34a33"))(length(palette.breaks) - 1)
+##Blue->white->red (useful for depicting fold change by heatmap)
+color.palette  <- colorRampPalette(c("#2f2f7e", "#f8f8ff", "#b80000"))(length(palette.breaks) - 1)
+##brightwhite->lightred->darkred (useful for depicting range of absolute values)
+#color.palette  <- colorRampPalette(c("#f8f8ff", "#c63232", "#b80000"))(length(palette.breaks) - 1)
+
+
+#plot and save the heatmap
+pdf("LB_H3K9me3_ChIP_Chap_AG_repeats_enrichment_analysis.pdf")
+dev.new()
+#heatmap(data_matrix,Colv=NA,col=brewer.pal(9,"Blues"))
+
+heatmap.2(
+
+    data_matrix,
+
+    dendrogram = "none",
+    scale      = "none",
+    trace      = "none",
+    cexRow=0.75, cexCol=1,
+    key        = TRUE,
+    density.info=c("none"),
+    keysize = 1,
+    Colv        = NA,
+    Rowv        = FALSE,
+#    xlab = "NULL",
+#    ylab       = "NULL",
+    main="H3K9me3 ChIP enrich at repeats",
+    labCol     = NULL,
+    col    = color.palette,
+    breaks = palette.breaks
+)
+dev.off()
+
+
+####MY TRIALS#####
+
+
+##TRIAL1
+library("RColorBrewer")
+library(gplots)
+data <- read.table("RNA_fig_log2fpkm.txt",sep="\t",header=TRUE,row.names=1)
+data_matrix <- data.matrix(data)
+row.names(data_matrix) <- seq(1, nrow(data_matrix),1)
+
+# Set colours for heatmap, 25 increments
+my_palette <- colorRampPalette(c("blue","white","red"))(n = 25)
+
+# Plot heatmap with heatmap.2
+pdf(file="my_heatmap.pdf",paper = "a4")     #Open a file for pdf
+par(cex.main=0.75) # Shrink title fonts on plot
+heatmap.2(data_matrix, Colv=NA, Rowv=FALSE, key=TRUE, density.info=c("none"), trace="none", col = my_palette, cexRow=0.5,cexCol=0.75)
+
+# Close file
+dev.off()
+
+
+##TRIAL2
+library("RColorBrewer")
+library(gplots)
+my_data1 <- read.table("RNA_fig_log2fpkm.txt",sep="\t",header=TRUE,row.names=1)
+View(my_data1) #checking dimension
+my_data <- data.frame(my_data1)
+View(my_data)
+matrix1<-as.matrix(my_data) #convert to matrix
+#Heatmap for all genes
+pdf(file="my_heatmap.pdf")
+heatmap.2(as.matrix(lcpm_filtered), col = redgreen(75),
+          symm = F,symkey=F,symbreaks=T,
+          margin=c(6, 6),
+          xlab="Samples", ylab= "Genes",
+          main="Gene Expression Heatmap Across all",
+          tracecol="green",trace = "none")
+dev.off()
+
+##TRIAL3
+library("RColorBrewer")
+library(gplots)
+hm <- read.table("test.txt",sep="\t",header=TRUE,row.names=1)
+head(hm)
+rownames(hm) <- hm$GeneName
+hm_matrix <- as.matrix(hm)
+head(hm_matrix)
+quantile.range <- quantile(hm_matrix, probs = seq(0, 1, 0.01))
+palette.breaks <- seq(quantile.range["5%"], quantile.range["95%"], 0.1)
+my_palette <- colorRampPalette(c("#f8f8ff", "#c63232", "#b80000"))(length(palette.breaks) - 1)
+#pdf(file="my_heatmap.pdf")
+dev.new()
+heatmap.2(as.matrix(hm_matrix), col = my_palette,
+          symm = F,symkey=F,symbreaks=T,
+          margin=c(6, 6),
+          xlab="Samples", ylab= "Genes",
+          main="D0 global heatmap",
+          Colv= NA,
+          Rowv= FALSE,
+          cexRow=0.5, cexCol=0.75,
+          tracecol="none",trace = "none",
+          dendrogram = "none",
+          breaks=palette.breaks)
+dev.off()

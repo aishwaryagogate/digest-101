@@ -1,0 +1,10 @@
+##subsetting specific samples/genes from a mega file
+##Last edit by Aishwarya on 9-Apr-2019.
+
+##For Example: Sara's run19 RNA-seq D0 & D4 with repl
+
+awk '($5 == "D0_129")' gene_exp.diff > subset_D0_129.txt
+awk '($6 == "D0_282")' subset_D0_129.txt > D0_282.txt
+
+awk '($5 == "D4_129")' gene_exp.diff > subset_D4_129.txt
+awk '($6 == "D4_282")' subset_D4_129.txt > D4_282.txt
